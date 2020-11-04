@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
+
 class ShelfAuthor(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField()
@@ -15,20 +16,23 @@ class ShelfObject(models.Model):
     title = models.CharField(max_length=200, default="SomeObject")
     status = models.IntegerField(default=0)  # "to do", "in progress" or "done"
     priority = models.IntegerField(default=0)
-    # TODO:
-    ## add abstract creator field
     description = models.TextField(default="", blank=True)
     created_at = models.DateTimeField(default=timezone.now)
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    # TODO: check if user can add book only with himself as owner
+    # TODO: add abstract creator field
 
     class Meta:
         abstract = True
 
 
 class BookAuthor(ShelfAuthor):
-    born = models.DateField()
-    died = models.DateField()
-    # name =   # should this work?
+    born = models.DateField(blank=True, null=True)
+    died = models.DateField(blank=True, null=True)
+    # name =   # TODO: rename base 'title' to 'name'
 
     def __str__(self):
         return self.title
