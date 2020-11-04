@@ -1,6 +1,6 @@
+from django.conf import settings
 from django.db import models
 from django.utils import timezone
-
 
 class ShelfAuthor(models.Model):
     title = models.CharField(max_length=200)
@@ -19,6 +19,7 @@ class ShelfObject(models.Model):
     ## add abstract creator field
     description = models.TextField(default="", blank=True)
     created_at = models.DateTimeField(default=timezone.now)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True
